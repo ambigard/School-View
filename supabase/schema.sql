@@ -182,3 +182,13 @@ create policy "users can update their own review" on reviews
 -- Authenticated users can flag reviews
 create policy "authenticated users can flag reviews" on review_flags
   for insert with check (auth.uid() is not null);
+
+-- Profiles: users can manage only their own profile row
+create policy "users can insert their own profile" on profiles
+  for insert with check (auth.uid() = id);
+
+create policy "users can view their own profile" on profiles
+  for select using (auth.uid() = id);
+
+create policy "users can update their own profile" on profiles
+  for update using (auth.uid() = id);
